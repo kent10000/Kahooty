@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿
+using System.Diagnostics;
+using System.Net;
 using System.Security.Principal;
 using HtmlAgilityPack;
 using Katoot;
@@ -6,10 +8,14 @@ using Newtonsoft.Json;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Safari;
+using OpenQA.Selenium.Support.UI;
 
 //gunna have to use selenium 
 
 //or websocket
+
+var mac = OperatingSystem.IsMacOS();
+
 var client = new HttpClient();
 client.BaseAddress = new Uri("https://kahoot.it/rest/kahoots/");
 Console.WriteLine("Enter the username you wish to use");
@@ -23,24 +29,35 @@ Console.WriteLine("Enter First Letters of Game UUID");
 var id = Console.ReadLine();
 
 Console.WriteLine("Enter the PIN");
-string? pin = null;
+string? pin = null; 
 while (string.IsNullOrEmpty(pin))
 {
     pin = Console.ReadLine();
 }
 
-var opt = new SafariOptions();
-var web = new SafariDriver(opt);
+WebDriver web;
+if (mac)
+{
+    web = new SafariDriver(); //I prefer safari
+} else
+{
+    web = new FirefoxDriver(@"C:\WebDriver\bin"); //Idk why it cant find on path so i have to specify
+}
+
+ 
+
 web.Navigate().GoToUrl("https://kahoot.it?pin=" + pin);
 web.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
 var p = web.FindElement(By.Name("nickname"));
 var b = web.FindElement(By.TagName("button"));
 p.SendKeys(username);
 b.Click();
-Console.ReadKey();
 
 
-Environment.Exit(1);
+
+
+
+
 
 
 Console.WriteLine("Now Enter Game Title");
@@ -65,8 +82,14 @@ var txt = await req.Content.ReadAsStringAsync();
 var info = JsonConvert.DeserializeObject<Info>(txt);
 
 Console.WriteLine(info.Title);
+var wait = new WebDriverWait(web, TimeSpan.FromSeconds(30)); 
 foreach (var question in info.Questions)
 {
+    
+    
+    //var choices = wait.Until(e => e.FindElements(By.TagName("button"))).ToArray();
+    wait.Until(x => x.FindElement(By.TagName("desc")));
+    
     //Console.WriteLine($"The Answer for {question.Layout} is...");
     var choiceCount = question.Choices.Length;
     var count = 0;
@@ -75,7 +98,9 @@ foreach (var question in info.Questions)
         count++;
         if (choice.Correct) break;
     }
+    var choices = web.FindElements(By.TagName("button")).ToArray();
     Console.WriteLine(count);
+    choices[count-1].Click();
     
 }
 
