@@ -16,3 +16,4 @@
 /Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/bin/Debug/net6.0/Newtonsoft.Json.dll
 /Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/obj/Debug/net6.0/KahootBotTest.csproj.CopyComplete
 /Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/bin/Debug/net6.0/HtmlAgilityPack.dll
+/Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/bin/Debug/net6.0/WebDriver.dll
