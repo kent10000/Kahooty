@@ -82,15 +82,17 @@ var txt = await req.Content.ReadAsStringAsync();
 var info = JsonConvert.DeserializeObject<Info>(txt);
 
 Console.WriteLine(info.Title);
-var wait = new WebDriverWait(web, TimeSpan.FromSeconds(30)); 
+var wait = new WebDriverWait(web, TimeSpan.FromSeconds(60)); 
 foreach (var question in info.Questions)
 {
     
     
     //var choices = wait.Until(e => e.FindElements(By.TagName("button"))).ToArray();
-    wait.Until(x => x.FindElement(By.TagName("desc")));
+    
     
     //Console.WriteLine($"The Answer for {question.Layout} is...");
+    
+    //TODO: Humanize answers
     var choiceCount = question.Choices.Length;
     var count = 0;
     foreach (var choice in question.Choices)
@@ -98,10 +100,19 @@ foreach (var question in info.Questions)
         count++;
         if (choice.Correct) break;
     }
+    wait.Until(x => x.FindElement(By.TagName("desc")));
     var choices = web.FindElements(By.TagName("button")).ToArray();
-    Console.WriteLine(count);
     choices[count-1].Click();
+    var tile = count switch
+    {
+        1 => "Triangle",
+        2 => "Diamond",
+        3 => "Circle",
+        _ => "Square"
+    };
     
+    Console.WriteLine($"Chose {tile}");
+
 }
 
 
