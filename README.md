@@ -1,2 +1,3 @@
 # Kahooty
-My Kahoot Bot To Always Win inspired by a monkey
+My Kahoot Bot To Always Win.
+Inspired by a monkey
