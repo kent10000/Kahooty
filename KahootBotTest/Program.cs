@@ -10,9 +10,7 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Safari;
 using OpenQA.Selenium.Support.UI;
 
-//gunna have to use selenium 
-
-//or websocket
+//TODO: CLEAN UP CODE
 
 var mac = OperatingSystem.IsMacOS();
 
@@ -47,7 +45,7 @@ if (mac)
  
 
 web.Navigate().GoToUrl("https://kahoot.it?pin=" + pin);
-web.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+web.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500); //lower timespam = more resources but higher score
 var p = web.FindElement(By.Name("nickname"));
 var b = web.FindElement(By.TagName("button"));
 p.SendKeys(username);
@@ -93,7 +91,6 @@ foreach (var question in info.Questions)
     //Console.WriteLine($"The Answer for {question.Layout} is...");
     
     //TODO: Humanize answers
-    var choiceCount = question.Choices.Length;
     var count = 0;
     foreach (var choice in question.Choices)
     {
@@ -102,7 +99,16 @@ foreach (var question in info.Questions)
     }
     wait.Until(x => x.FindElement(By.TagName("desc")));
     var choices = web.FindElements(By.TagName("button")).ToArray();
-    choices[count-1].Click();
+    try
+    {
+
+
+        choices[count - 1].Click();
+    } catch (IndexOutOfRangeException e)
+    {
+        continue;
+    }
+
     var tile = count switch
     {
         1 => "Triangle",
@@ -112,6 +118,7 @@ foreach (var question in info.Questions)
     };
     
     Console.WriteLine($"Chose {tile}");
+    Thread.Sleep(1000);
 
 }
 
