@@ -12,6 +12,9 @@ using OpenQA.Selenium.Support.UI;
 //TODO: CLEAN UP CODE
 
 var mac = OperatingSystem.IsMacOS();
+const bool human = true;
+const int minMs = 0;
+const int maxMs = 2000;
 
 var client = new HttpClient();
 client.BaseAddress = new Uri("https://kahoot.it/rest/kahoots/");
@@ -26,11 +29,8 @@ Console.WriteLine("Enter the PIN");
 string? pin = null;
 while (string.IsNullOrEmpty(pin)) pin = Console.ReadLine();
 
-WebDriver web;
-if (mac)
-    web = new SafariDriver(); //I prefer safari
-else
-    web = new FirefoxDriver(@"C:\WebDriver\bin"); //Idk why it cant find on path so i have to specify
+
+var web = mac ? new FirefoxDriver(@"/Users/aaron/Documents") : new FirefoxDriver(@"C:\WebDriver\bin");
 
 
 web.Navigate().GoToUrl("https://kahoot.it?pin=" + pin);
@@ -59,6 +59,7 @@ var info = JsonConvert.DeserializeObject<Info>(txt);
 
 Console.WriteLine(info.Title);
 var wait = new WebDriverWait(web, TimeSpan.FromSeconds(60));
+var random = new Random();
 foreach (var question in info.Questions)
 {
     //var choices = wait.Until(e => e.FindElements(By.TagName("button"))).ToArray();
@@ -74,8 +75,12 @@ foreach (var question in info.Questions)
         if (choice.Correct) break;
     }
 
-    wait.Until(x => x.FindElement(By.TagName("desc")));
+    wait.Until(x => x.FindElement(By.TagName("desc"))); //Broken On Chromium and webkit rn
     var choices = web.FindElements(By.TagName("button")).ToArray();
+    if (human)
+    {
+        
+    }
     try
     {
         choices[count - 1].Click();
