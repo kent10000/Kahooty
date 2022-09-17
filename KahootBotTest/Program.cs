@@ -1,5 +1,10 @@
 ﻿#region
 
+using System;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Katoot;
 using Newtonsoft.Json;
 using OpenQA.Selenium;
@@ -10,7 +15,7 @@ using OpenQA.Selenium.Support.UI;
 #endregion
 
 //TODO: CLEAN UP CODE
-
+const bool old = false;
 var mac = OperatingSystem.IsMacOS();
 const bool human = true;
 const int minMs = 0;
@@ -35,7 +40,7 @@ var web = mac ? new FirefoxDriver(@"/Users/aaron/Documents") : new FirefoxDriver
 
 web.Navigate().GoToUrl("https://kahoot.it?pin=" + pin);
 web.Manage().Timeouts().ImplicitWait =
-    TimeSpan.FromMilliseconds(500); //lower timespam = more resources but higher score
+    TimeSpan.FromMilliseconds(30000); //lower timespam = more resources but higher score
 var p = web.FindElement(By.Name("nickname"));
 var b = web.FindElement(By.TagName("button"));
 p.SendKeys(username);
@@ -75,11 +80,21 @@ foreach (var question in info.Questions)
         if (choice.Correct) break;
     }
 
-    wait.Until(x => x.FindElement(By.TagName("desc"))); //Broken On Chromium and webkit rn
+    if (old)
+    {
+        wait.Until(x => x.FindElement(By.TagName("desc"))); //Broken On Chromium and webkit rn
+    }
+    else
+    {
+        wait.Until(x => x.FindElement(By.TagName("hr"))); //Broken On Chromium and webkit rn
+    }
+    
+    
     var choices = web.FindElements(By.TagName("button")).ToArray();
     if (human)
     {
-        
+        var ts = random.Next(minMs, maxMs);
+        Thread.Sleep(ts);
     }
     try
     {
@@ -111,6 +126,11 @@ async Task<Guid?> FindUuid(string? fChar, string title)
     var deserializeObject = JsonConvert.DeserializeObject<Search>(raw);
     if (deserializeObject == null) return default;
 
+    if (string.IsNullOrEmpty(fChar))
+    {
+        return deserializeObject.entities.First().card.uuid;
+    }
+
     Guid uuid = default;
 
     foreach (var entry in deserializeObject.entities)
@@ -126,4 +146,12 @@ async Task<Guid?> FindUuid(string? fChar, string title)
     }
 
     return uuid;
+}
+
+bool exists(By element)
+{
+    try { web.FindElement(element); }
+    catch (NoSuchElementException) { return false; }
+
+    return true;
 }

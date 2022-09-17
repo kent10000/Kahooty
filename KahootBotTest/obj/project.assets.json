@@ -141,24 +141,26 @@
     ]
   },
   "packageFolders": {
-    "/Users/aaron/.nuget/packages/": {}
+    "C:\\Users\\kent\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/KahootBotTest.csproj",
+      "projectUniqueName": "C:\\Users\\kent\\RiderProjects\\Kahooty\\KahootBotTest\\KahootBotTest.csproj",
       "projectName": "KahootBotTest",
-      "projectPath": "/Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/KahootBotTest.csproj",
-      "packagesPath": "/Users/aaron/.nuget/packages/",
-      "outputPath": "/Users/aaron/RiderProjects/KahootBotTest/KahootBotTest/obj/",
+      "projectPath": "C:\\Users\\kent\\RiderProjects\\Kahooty\\KahootBotTest\\KahootBotTest.csproj",
+      "packagesPath": "C:\\Users\\kent\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kent\\RiderProjects\\Kahooty\\KahootBotTest\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/aaron/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\kent\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -205,7 +207,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/Users/aaron/.dotnet/sdk/6.0.300/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
