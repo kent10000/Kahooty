@@ -65,6 +65,7 @@ var info = JsonConvert.DeserializeObject<Info>(txt);
 Console.WriteLine(info.Title);
 var wait = new WebDriverWait(web, TimeSpan.FromSeconds(60));
 var random = new Random();
+var first = true;
 foreach (var question in info.Questions)
 {
     //var choices = wait.Until(e => e.FindElements(By.TagName("button"))).ToArray();
@@ -79,18 +80,21 @@ foreach (var question in info.Questions)
         count++;
         if (choice.Correct) break;
     }
-
+    
     if (old)
     {
         wait.Until(x => x.FindElement(By.TagName("desc"))); //Broken On Chromium and webkit rn
     }
     else
     {
-        wait.Until(x => x.FindElement(By.TagName("hr"))); //Broken On Chromium and webkit rn
+        wait.Until(x => x.FindElement(By.XPath("/html/body/div/div[1]/div/div/main/div[2]/div/div[2]"))); //Broken On Chromium and webkit rn
+        Console.WriteLine("Found");
     }
     
     
-    var choices = web.FindElements(By.TagName("button")).ToArray();
+    //var choices = web.FindElements(By.TagName("button")).ToArray();
+    var choices = web.FindElements(By.XPath("/html/body/div/div[1]/div/div/main/div[2]/div/div[2]/button")).ToArray();
+    Console.WriteLine("Clicking");
     if (human)
     {
         var ts = random.Next(minMs, maxMs);
@@ -99,6 +103,7 @@ foreach (var question in info.Questions)
     try
     {
         choices[count - 1].Click();
+        
     }
     catch (IndexOutOfRangeException e)
     {
@@ -148,7 +153,7 @@ async Task<Guid?> FindUuid(string? fChar, string title)
     return uuid;
 }
 
-bool exists(By element)
+bool Exists(By element)
 {
     try { web.FindElement(element); }
     catch (NoSuchElementException) { return false; }
