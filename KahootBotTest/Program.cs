@@ -15,11 +15,12 @@ using OpenQA.Selenium.Support.UI;
 #endregion
 
 //TODO: CLEAN UP CODE
-const bool old = false;
+var sn = 0;
+const bool old = true;
 var mac = OperatingSystem.IsMacOS();
 const bool human = true;
-const int minMs = 0;
-const int maxMs = 2000;
+const int minMs = 100;
+const int maxMs = 2500;
 
 var client = new HttpClient();
 client.BaseAddress = new Uri("https://kahoot.it/rest/kahoots/");
@@ -66,8 +67,11 @@ Console.WriteLine(info.Title);
 var wait = new WebDriverWait(web, TimeSpan.FromSeconds(60));
 var random = new Random();
 var first = true;
+var num = 0;
 foreach (var question in info.Questions)
 {
+    num++;
+    if (num < sn) continue;
     //var choices = wait.Until(e => e.FindElements(By.TagName("button"))).ToArray();
 
 
@@ -90,10 +94,11 @@ foreach (var question in info.Questions)
         wait.Until(x => x.FindElement(By.XPath("/html/body/div/div[1]/div/div/main/div[2]/div/div[2]"))); //Broken On Chromium and webkit rn
         Console.WriteLine("Found");
     }
+
+    IWebElement[] choices;
+    choices = old ? web.FindElements(By.TagName("button")).ToArray() : web.FindElements(By.XPath("/html/body/div/div[1]/div/div/main/div[2]/div/div[2]/button")).ToArray();
     
     
-    //var choices = web.FindElements(By.TagName("button")).ToArray();
-    var choices = web.FindElements(By.XPath("/html/body/div/div[1]/div/div/main/div[2]/div/div[2]/button")).ToArray();
     Console.WriteLine("Clicking");
     if (human)
     {
@@ -102,7 +107,16 @@ foreach (var question in info.Questions)
     }
     try
     {
-        choices[count - 1].Click();
+        var r = random.Next(0, 8);
+        if (r != 3)
+        {
+            choices[count - 1].Click();
+        }
+        else
+        {
+            choices[0].Click();
+        }
+        
         
     }
     catch (IndexOutOfRangeException e)
