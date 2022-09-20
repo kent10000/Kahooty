@@ -68,6 +68,8 @@ var wait = new WebDriverWait(web, TimeSpan.FromSeconds(60));
 var random = new Random();
 var first = true;
 var num = 0;
+//TODO: Determine New or Old
+//probably checking for loading bar
 foreach (var question in info.Questions)
 {
     num++;
@@ -76,8 +78,7 @@ foreach (var question in info.Questions)
 
 
     //Console.WriteLine($"The Answer for {question.Layout} is...");
-
-    //TODO: Humanize answers
+    
     var count = 0;
     foreach (var choice in question.Choices)
     {
@@ -116,8 +117,6 @@ foreach (var question in info.Questions)
         {
             choices[0].Click();
         }
-        
-        
     }
     catch (IndexOutOfRangeException e)
     {
