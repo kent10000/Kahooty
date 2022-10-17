@@ -111,14 +111,22 @@ foreach (var question in info.Questions)
         var r = random.Next(0, 8);
         if (r != 3)
         {
-            choices[count - 1].Click();
+            try
+            {
+                choices[count - 1].Click();
+            }
+            catch (StaleElementReferenceException)
+            {
+                continue;
+            }
+            
         }
         else
         {
             choices[0].Click();
         }
     }
-    catch (IndexOutOfRangeException e)
+    catch (IndexOutOfRangeException)
     {
         continue;
     }
